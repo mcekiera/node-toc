@@ -2,20 +2,19 @@ import fs from 'fs';
 import chalk from 'chalk';
 
 const warning = chalk.red;
+const success = chalk.green;
 
-function config(path) {
-  if (path == null || !fs.existsSync(path)) {
-    console.log(warning('Config file not found: ' + path));
-    process.exit();
-  } else {
-    let conf = fs.readFileSync(path, 'utf8');
+
+function getConfiguration(path) {
     try {
-      JSON.parse(conf);
+      let result = JSON.parse(fs.readFileSync(path, 'utf8'));
+      console.log(success('Config loaded'));
+      return result;
     } catch (err) {
-      console.log(warning('Invalid config json:' + err));
+      console.log(warning(err));
+      console.log(warning('process exit'));
       process.exit();
     }
-  }
 }
 
-export {config};
+export {getConfiguration};

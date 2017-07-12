@@ -1,13 +1,13 @@
 {
-  "tocStart": "/start/",
-  "tocEnd": "/end/",
+  "tocStart": "^sta(rt)$",
+  "tocEnd": "^end$",
   "headers": [
     {
-      "regex": "/h1.+/",
+      "regex": "^h1(.+$)",
       "params": ["param"]
     },
     {
-      "regex": "/h2.+/",
+      "regex": "^h2(.+$)",
       "params": ["param"]
     }
   ]

@@ -4,15 +4,22 @@ import readline from 'readline';
 export default class TocFile {
 
   constructor(filePath) {
-    this.path = filePath;
-  }
-  data = (fs.readFileSync(filePath, 'utf8').split(/[\n\r]+/))();
-  name = (() => filePath.match(/[\w_-]+\.\w+$/)[0])();
-  getLines = () => {
-    return this.data.map((line, index) => ({
+    const data = fs.readFileSync(filePath, 'utf8').split(/[\n\r]+/);
+    const path = filePath;
+    const name = filePath.match(/[\w_-]+\.\w+$/)[0];
+
+    this.getData = () => { return data; };
+    this.getPath = () => { return path; };
+    this.getName = () => { return name; };
+    this.getLines = () => {
+    return data.map((line, index) => ({
       'index': index + 1,
       'line': line
     }));
   }
+
+  }
+  
+
 
 }
