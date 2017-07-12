@@ -1,0 +1,14 @@
+{
+  "tocStart": "/start/",
+  "tocEnd": "/end/",
+  "headers": [
+    {
+      "regex": "/h1.+/",
+      "params": ["param"]
+    },
+    {
+      "regex": "/h2.+/",
+      "params": ["param"]
+    }
+  ]
+}

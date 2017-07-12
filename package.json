@@ -2,9 +2,10 @@
   "name": "node-toc",
   "version": "1.0.0",
   "description": "Simple script for creation a table of contents of given stylesheet file.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "babel": "babel src/*.js -o ./index.js"
+    "babel": "babel src --watch --out-dir dist",
+    "start": "node dist/index.js"
   },
   "author": "mcekiera",
   "license": "MIT",
