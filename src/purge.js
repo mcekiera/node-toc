@@ -2,67 +2,69 @@ import fs from 'fs';
 import chalk from 'chalk';
 
 export default function(config, pathIn, pathOut) {
-  const isFile = (path) => { return /\w+\.\w+$/.test(path); };
+  const isFile = path => /\w+\.\w+$/.test(path);
   const pathOutput = pathOut || pathIn;
+  const failure = chalk.red;
+  const succes = chalk.green;
 
   const purge = (data) => {
-    const br = /[\n\r]+/.exec(data)[0],
-          content = data.split(/[\n\r]+/),
-          output = [],
-          regStart = new RegExp(config.tocStart),
-          regEnd = new RegExp(config.tocEnd);
+    const br = /[\n\r]+/.exec(data)[0];
+    const content = data.split(/[\n\r]+/);
+    const output = [];
+    const regStart = new RegExp(config.tocStart);
+    const regEnd = new RegExp(config.tocEnd);
 
     let inToC = false;
 
     content.forEach((line) => {
-      if(regStart.test(line)) {
+      if (regStart.test(line)) {
         inToC = true;
-      } 
+      }
 
-      if(!inToC) {
+      if (!inToC) {
         output.push(line);
       }
 
       if (regEnd.test(line)) {
         inToC = false;
       }
-    })
+    });
 
     return output.join(br);
-  }
+  };
 
   const purgeFile = (inPath, outPath) => {
-    fs.readFile(inPath, 'utf8', (err, data) => {
-      if(err) {
-        console.log(chalk.red(err));
+    fs.readFile(inPath, 'utf8', (errIn, data) => {
+      if (errIn) {
+        failure(errIn);
       } else {
-        fs.writeFile(outPath, purge(data), (err) => {
-          if(err) {
-            console.log(chalk.red(err)); 
+        fs.writeFile(outPath, purge(data), (errOut) => {
+          if (errOut) {
+            failure(errOut);
           } else {
-            console.log(chalk.green(`Output for purged file: ${outPath}`)); 
-          };
+            console.log(chalk.green(`Output for purged file: ${outPath}`));
+          }
         });
       }
     });
-  }
+  };
 
   const purgeDir = (inPath, outPath) => {
-    if(isFile(outPath)) {
-      console.log(chalk.red("Invalid output path: path should point to directory")); 
-      throw new Error('Invalid path')
-    } 
+    if (isFile(outPath)) {
+      console.log(chalk.red('Invalid output path: path should point to directory'));
+      throw new Error('Invalid path');
+    }
     fs.readdir(pathIn, (err, files) => {
       files.forEach((file) => {
-        if(err) {
-          console.log(chalk.red(err)); 
-        } else if(file.endsWith(config.output.ext)) {
+        if (err) {
+          err(err);
+        } else if (file.endsWith(config.output.ext)) {
           purgeFile(`${inPath}${file}`, `${outPath}${file}`);
         }
-      })
-    })
-  }
-  
+      });
+    });
+  };
+
   if (isFile(pathIn)) {
     purgeFile(pathIn, pathOutput);
   } else {

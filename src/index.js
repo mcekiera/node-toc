@@ -1,9 +1,8 @@
-import fs from 'fs';
 import chalk from 'chalk';
-import {default as File} from './file';
-import {getConfiguration} from './config';
-import {default as Processor} from './processor';
-import {default as purge} from './purge';
+import File from './file';
+import { getConfiguration } from './config';
+import Processor from './processor';
+import purge from './purge';
 
 console.log(chalk.gray(process.argv));
 const config = getConfiguration('./test/.tocrc');

@@ -1,7 +1,6 @@
-import { default as ToC } from './toc';
+import ToC from './toc';
 
 export default class Processor {
-
   constructor(lines, config) {
     this.config = config;
     this.lines = lines;
@@ -9,16 +8,16 @@ export default class Processor {
 
   getRegExps() {
     const regexps = {
-      headers: []
+      headers: [],
     };
 
-    for(param in ['tocStart', 'tocEnd', 'author', 'title']) {
-      if(this.config[param] != '') {
+    for (const param in ['tocStart', 'tocEnd', 'author', 'title']) {
+      if (this.config[param] !== '') {
         regexps[param] = new RegExp(this.config[param]);
       }
     }
 
-    this.config.headers.forEach((header, index) => { 
+    this.config.headers.forEach((header, index) => {
       regexps.headers[index] = new RegExp(header.regex);
     });
 
@@ -35,29 +34,27 @@ export default class Processor {
     const update = (param) => {
       result[param] = {
         lineNo: this.lines[i].index,
-        match: r[param].exec(this.lines[i].line)
-      }
-    }
+        match: r[param].exec(this.lines[i].line),
+      };
+    };
 
-    const is = (param) => {
-      r[param] &&  r[param].test(this.lines[i].line)
-    }
+    const is = param => r[param] && r[param].test(this.lines[i].line);
 
-    for(i = 0; i < len; i += 1) {
-      if(inFile) {
-        for(param in ['tocStart', 'tocEnd', 'author', 'title']) {
+    for (i = 0; i < len; i += 1) {
+      if (inFile) {
+        for (const param in ['tocStart', 'tocEnd', 'author', 'title']) {
           if (is(param)) {
             update(param);
           }
         }
-      } 
+      }
 
       r.headers.forEach((reg, index) => {
-        if(reg.test(this.lines[i].line)) {
+        if (reg.test(this.lines[i].line)) {
           result.headers[index].push({
             index: this.lines[i].index,
             lvl: index,
-            match: reg.exec(this.lines[i].line)
+            match: reg.exec(this.lines[i].line),
           });
         }
       });
